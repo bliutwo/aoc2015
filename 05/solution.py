@@ -17,7 +17,7 @@ def twice_in_a_row(name):
 
 def no_naughty_strings(name):
     n = len(name)
-    for i in range(2, n):
+    for i in range(2, n+1):
         if name[i-2:i] in naughty_strings:
             return False
     return True
@@ -51,3 +51,45 @@ for name in strings:
         nice_count += 1
 
 print(nice_count)
+
+names_and_niceness = {
+    "qjhvhtzxzqqjkmpb": True,
+    "xxyxx": True,
+    "uurcxstgmygtbstg": False,
+    "ieodomkazucvgmuy": False
+}
+
+def pair_without_overlapping(name):
+    seen = set()
+    n = len(name)
+    for i in range(2, n+1):
+        pair = name[i-2:i]
+        prev_pair = None
+        if i >= 3:
+            prev_pair = name[i-3:i-1]
+        if pair in seen and prev_pair and prev_pair != pair:
+            return True
+        seen.add(pair)
+    return False
+
+def repeat_with_one_inbetween(name):
+    n = len(name)
+    for i in range(2, n):
+        if name[i] == name[i - 2]:
+            return True
+    return False
+
+def is_new_nice(name):
+    return pair_without_overlapping(name) and repeat_with_one_inbetween(name)
+
+for name, niceness in names_and_niceness.items():
+    print(is_new_nice(name) == niceness)
+
+nice_count = 0
+
+for name in strings:
+    if is_new_nice(name):
+        nice_count += 1
+
+print(nice_count)
+
